@@ -1,12 +1,22 @@
 // Save elements as variables
-imgFront = document.getElementById('front-image');
-imgBack = document.getElementById('back-image');
-buttonFront = document.getElementById('front-button');
-buttonBack = document.getElementById('back-button');
+let imgFront = document.getElementById('front-image');
+let imgBack = document.getElementById('back-image');
+let buttonFront = document.getElementById('front-button');
+let buttonBack = document.getElementById('back-button');
+let buttonMag = document.getElementById('mag-button');
+let slider = document.getElementById('mag-slider-container');
+let sliderRange = document.getElementById('mag-range-slider');
 
+sliderRange.oninput = changeZoom;
 buttonFront.onclick = borderChange;
 buttonBack.onclick = borderChange;
-
+buttonMag.onclick = toggleMagnify;
+let toggle = 0;
+let toggleEnable = true;
+/* Create magnifier glass: */
+let glass = document.createElement("DIV");
+glass.setAttribute("class", "img-magnifier-glass");
+let zoom = 1.5;
 
 function borderChange(e) {
     buttonFront.style.border = "1px solid rgba(128, 128, 128, 0.44)"
@@ -15,20 +25,77 @@ function borderChange(e) {
     e.target.style.border = "1px solid grey"
     
     console.log(e);
-    imgFront.style.opacity = e.target.id === "front-button"
-        ? '100%' : '0%';
-    imgBack.style.opacity = e.target.id === "front-button"
-        ? '0%' : '100%';
+
+
+    if (e.target.id === 'front-button') {
+        imgFront.style.opacity = "100%";
+        imgBack.style.opacity = "0%";
+        glass.style.backgroundImage = "url('" + imgFront.src + "')";
+    }
+    else {
+        imgFront.style.opacity = "0%";
+        imgFront.zIndex = "-15";
+        imgBack.style.opacity = "100%";
+        glass.style.backgroundImage = "url('" + imgBack.src + "')";
+    }
+}
+
+// Toggly magnifying glass //
+function toggleMagnify(e) {
+    if(toggleEnable) {
+        toggle++;
+    if (!!(toggle % 2)) {   //turn OFF
+        toggleEnable = false;
+        e.target.style.background = "none";
+        e.target.children[0].style.color = '#878a8e';
+        glass.style.display = 'none';
+        
+        // collapse slider
+        slider.style.maxWidth = '0';
+        slider.style.padding = '0';
+        slider.style.margin = '0';
+        slider.style.overflow = 'hidden';
+        slider.style.transition = "max-width 0.1s ease-in"
+        setTimeout(() => {
+            slider.style.borderWidth = '0'
+            e.target.style.borderTopRightRadius = '5px'
+            e.target.style.borderBottomRightRadius = '5px'
+            toggleEnable = true;
+        }, 90);
+    } else {                // turn ON
+        toggleEnable = false;
+        e.target.style.background = "#dcdcdc74";
+        e.target.children[0].style.color = '#6a6d6f';
+        glass.style.display = '';
+
+        // expand slider
+        slider.style.maxWidth = '';
+        slider.style.padding = '';
+        slider.style.margin = '';
+        slider.style.overflow = '';
+        e.target.style.borderTopRightRadius = '0'
+        e.target.style.borderBottomRightRadius = '0'
+        slider.style.border = '';
+        slider.style.transition = "max-width 0.1s ease-out"
+        setTimeout(() => {
+            toggleEnable = true;
+        }, 90)
+    }
+    }
+}
+
+// Change magnifying glass zoom
+function changeZoom(e) {
+    zoom = e.target.value;
+    console.log(e.target.value);
 }
 
 // Magnifying glass function //
 function magnify(imgID, zoom) {
-    var img, glass, w, h, bw;
+    var img, w, h, bw;
     img = document.getElementById(imgID);
   
-    /* Create magnifier glass: */
-    glass = document.createElement("DIV");
-    glass.setAttribute("class", "img-magnifier-glass");
+    
   
     /* Insert magnifier glass: */
     img.parentElement.insertBefore(glass, img);
@@ -83,4 +150,4 @@ function magnify(imgID, zoom) {
     }
 }
 
-magnify("front-image", 2);
+magnify("front-image", zoom);

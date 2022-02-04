@@ -7,15 +7,26 @@
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
     <script src='main.js' defer></script>
+    <script src="https://kit.fontawesome.com/ea11f319af.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <div class="slider img-magnifier-container">
         <img id="front-image" class="front" src="https://cdn.shopify.com/s/files/1/0016/6821/8969/files/patchbay_micro_front.png?v=1643977335" alt="microsize patchbay front">
-        <img id="back-image" class="back" src="https://cdn.shopify.com/s/files/1/0016/6821/8969/files/patchbay_micro_rear.png?v=1643977335" alt="microsize patchbay rear" style="z-index: -1;">
+        <img id="back-image" class="back" src="https://cdn.shopify.com/s/files/1/0016/6821/8969/files/patchbay_micro_rear.png?v=1643977335" alt="microsize patchbay rear">
     </div>
-    <div class="img_buttons">
-        <img id="front-button" src="https://cdn.shopify.com/s/files/1/0016/6821/8969/files/patchbay_micro_front.png?v=1643977335" alt="microsize patchbay front">
-        <img id="back-button" src="https://cdn.shopify.com/s/files/1/0016/6821/8969/files/patchbay_micro_rear.png?v=1643977335" alt="microsize patchbay rear">
-    </div>
+    <br><br>
+    <div class="img_buttons clearfix">
+        <div id="front-button">
+            <img src="https://cdn.shopify.com/s/files/1/0016/6821/8969/files/patchbay_micro_front.png?v=1643977335" alt="microsize patchbay front">
+        </div>
+        <div id="back-button">
+            <img src="https://cdn.shopify.com/s/files/1/0016/6821/8969/files/patchbay_micro_rear.png?v=1643977335" alt="microsize patchbay rear">
+        </div>
+        <div id="mag-button">
+            <i class="fas fa-search"></i>
+        </div>
+        <div id="mag-slider-container">
+            <input type="range" min="1" max="3" value="1.5" step="0.01" id="mag-range-slider" class="mag-slider">
+        </div>
 </body>
 </html>

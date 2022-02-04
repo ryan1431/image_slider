@@ -14,12 +14,12 @@
 
 }
 
-.slider .front {
+.slider .image-front {
     opacity: 100%;
     transition-duration: 0.3s;
 }
 
-.slider .back {
+.slider .image-back {
     position: absolute;
     left: 0px;
     opacity: 0%;
@@ -105,7 +105,7 @@
 .mag-slider::-webkit-slider-thumb {
     -webkit-appearance: none; /* Override default look */
     appearance: none;
-    width: 10px; /* Set a specific slider handle width */
+    width: 6px; /* Set a specific slider handle width */
     height: 25px; /* Slider handle height */
     background: #5c5e5d; /* Green background */
     cursor: pointer; /* Cursor on hover */
@@ -113,7 +113,7 @@
 }
 
 .mag-slider::-moz-range-thumb {
-    width: 10px; /* Set a specific slider handle width */
+    width: 6px; /* Set a specific slider handle width */
     height: 25px; /* Slider handle height */
     background: #5c5e5d; /* Green background */
     cursor: pointer; /* Cursor on hover */
@@ -141,7 +141,7 @@
     opacity: 1;
 }
 
-#back-image {
+.image-back {
     z-index: -1;
 }
 

@@ -1,8 +1,14 @@
 // Save elements as variables
-let imgFront = document.getElementById('front-image');
-let imgBack = document.getElementById('back-image');
+// n refers to the child number which will be set later
+let n = 0;
+let imgFront = document.getElementsByClassName('image-front');
+let imgBack = document.getElementsByClassName('image-back');
+
+
 let buttonFront = document.getElementById('front-button');
 let buttonBack = document.getElementById('back-button');
+
+
 let buttonMag = document.getElementById('mag-button');
 let slider = document.getElementById('mag-slider-container');
 let sliderRange = document.getElementById('mag-range-slider');
@@ -30,8 +36,8 @@ let zoom = 1.5;
 function activateGlass(e) {
     console.log(e);
     if(magnifyActive) {
-        magnify(e.target.closest('.slider').querySelector("[data-active='true']").id, zoom);
-        console.log(e.target.closest('.slider').querySelector("[data-active='true']").id);
+        magnify(e.target.closest('.slider').querySelector("[data-active='true']"), zoom);
+        console.log(e.target.closest('.slider').querySelector("[data-active='true']").class);
     }
 }
 
@@ -48,20 +54,21 @@ function photoChange(e) {
 
 
     if (e.target.id === 'front-button') {
-        imgFront.style.opacity = "100%";
-        imgBack.style.opacity = "0%";
-        //glass.style.backgroundImage = "url('" + imgFront.src + "')";
+        imgFront[n].style.opacity = "100%";
+        imgBack[n].style.opacity = "0%";
+        //glass.style.backgroundImage = "url('" + imgFront[n].src + "')";
         console.log(e.target);
-        e.target.closest('.img-full-container').querySelector("#front-image").dataset.active = 'true';
-        e.target.closest('.img-full-container').querySelector("#back-image").dataset.active = 'false';
+        e.target.closest('.img-full-container').querySelector(".image-front").dataset.active = 'true';
+        e.target.closest('.img-full-container').querySelector(".image-back").dataset.active = 'false';
     }
     else {
-        imgFront.style.opacity = "0%";
-        imgFront.zIndex = "-15";
-        imgBack.style.opacity = "100%";
-        //glass.style.backgroundImage = "url('" + imgBack.src + "')";
-        e.target.closest('.img-full-container').querySelector("#front-image").dataset.active = 'false';
-        e.target.closest('.img-full-container').querySelector("#back-image").dataset.active = 'true';
+        imgFront[n].style.opacity = "0%";
+        imgFront[n].zIndex = "-15";
+        imgBack[n].style.opacity = "100%";
+        console.log(e.target.closest('.img-full-container').querySelector(".image-front"));
+        //glass.style.backgroundImage = "url('" + imgBack[n].src + "')";
+        e.target.closest('.img-full-container').querySelector(".image-front").dataset.active = 'false';
+        e.target.closest('.img-full-container').querySelector(".image-back").dataset.active = 'true';
         
     }
 }
@@ -122,29 +129,28 @@ function changeZoom(e) {
 
 // Magnifying glass function //
 function magnify(imgID, zoomAmt) {
-    var img, w, h, bw;
-    img = document.getElementById(imgID);
+    var w, h, bw;
   
     
   
     /* Insert magnifier glass: */
-    img.parentElement.insertBefore(glass, img);
+    imgID.parentElement.insertBefore(glass, imgID);
   
     /* Set background properties for the magnifier glass: */
-    glass.style.backgroundImage = "url('" + img.src + "')";
+    glass.style.backgroundImage = "url('" + imgID.src + "')";
     glass.style.backgroundRepeat = "no-repeat";
-    glass.style.backgroundSize = (img.width * zoomAmt) + "px " + (img.height * zoomAmt) + "px";
+    glass.style.backgroundSize = (imgID.width * zoomAmt) + "px " + (imgID.height * zoomAmt) + "px";
     bw = 3;
     w = glass.offsetWidth / 2;
     h = glass.offsetHeight / 2;
   
     /* Execute a function when someone moves the magnifier glass over the image: */
     glass.addEventListener("mousemove", moveMagnifier);
-    img.addEventListener("mousemove", moveMagnifier);
+    imgID.addEventListener("mousemove", moveMagnifier);
   
     /*and also for touch screens:*/
     glass.addEventListener("touchmove", moveMagnifier);
-    img.addEventListener("touchmove", moveMagnifier);
+    imgID.addEventListener("touchmove", moveMagnifier);
     function moveMagnifier(e) {
       var pos, x, y;
       /* Prevent any other actions that may occur when moving over the image */
@@ -154,9 +160,9 @@ function magnify(imgID, zoomAmt) {
       x = pos.x;
       y = pos.y;
       /* Prevent the magnifier glass from being positioned outside the image: */
-      if (x > img.width - (w / zoomAmt)) {x = img.width - (w / zoomAmt);}
+      if (x > imgID.width - (w / zoomAmt)) {x = imgID.width - (w / zoomAmt);}
       if (x < w / zoomAmt) {x = w / zoomAmt;}
-      if (y > img.height - (h / zoomAmt)) {y = img.height - (h / zoomAmt);}
+      if (y > imgID.height - (h / zoomAmt)) {y = imgID.height - (h / zoomAmt);}
       if (y < h / zoomAmt) {y = h / zoomAmt;}
       /* Set the position of the magnifier glass: */
       glass.style.left = (x - w) + "px";
@@ -169,7 +175,7 @@ function magnify(imgID, zoomAmt) {
       var a, x = 0, y = 0;
       e = e || window.event;
       /* Get the x and y positions of the image: */
-      a = img.getBoundingClientRect();
+      a = imgID.getBoundingClientRect();
       /* Calculate the cursor's x and y coordinates, relative to the image: */
       x = e.pageX - a.left;
       y = e.pageY - a.top;

@@ -2,24 +2,20 @@
     box-sizing: border-box;
 }
 
-.slider {
+.img-full-container {
     width: fit-content;
 }
 
-
-
-.slider img {
+.img-magnifier-container img {
     width: 575px;
-
-
 }
 
-.slider .image-front {
+.img-magnifier-container .image-front {
     opacity: 100%;
     transition-duration: 0.3s;
 }
 
-.slider .image-back {
+.img-magnifier-container .image-back {
     position: absolute;
     left: 0px;
     opacity: 0%;
@@ -31,6 +27,8 @@
     border: 1px solid rgba(128, 128, 128, 0.44);
     border-radius: 5px;
     height: 51px;
+    float: left;
+    margin-left: 4px;
 }
 
 .img_buttons img {
@@ -43,15 +41,12 @@
     pointer-events: none;
 }
 
-.img_buttons div {
-    float: left;
-    margin-left: 4px;
-}
 
 .img_buttons div:hover {
     cursor:pointer;
 }
-#front-button {
+
+.img_buttons .front-button {
     border: 1px solid grey;
 }
 
@@ -62,7 +57,7 @@
 }
 
 /* magnify enable button */
-#mag-button {
+.img_buttons .mag-button {
     font-size: 25px;
     /*color: #575859;*/
     color: #6a6d6f;
@@ -79,7 +74,17 @@
     align-items: center;
     padding: 0;
 }
-#mag-slider-container {
+/* temporary */
+[class^='mag'] {
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+/* ^ temporary ^ */
+
+.img_buttons .mag-slider-container {
     margin-left: 0;
     max-width: 150px;
     width: auto;
@@ -90,7 +95,7 @@
 }
 
 /* custom slider */
-.mag-slider {
+.img_buttons .mag-range-slider {
     position:relative;
     -webkit-appearance: none;
     width: 100%;
@@ -102,7 +107,7 @@
     -webkit-transition: .2s;
     transition: opacity .2s;
   }
-.mag-slider::-webkit-slider-thumb {
+.img_buttons .mag-range-slider::-webkit-slider-thumb {
     -webkit-appearance: none; /* Override default look */
     appearance: none;
     width: 6px; /* Set a specific slider handle width */
@@ -112,7 +117,7 @@
     border-radius: 10px;
 }
 
-.mag-slider::-moz-range-thumb {
+.img_buttons .mag-range-slider::-moz-range-thumb {
     width: 6px; /* Set a specific slider handle width */
     height: 25px; /* Slider handle height */
     background: #5c5e5d; /* Green background */
@@ -123,6 +128,7 @@
 /* magnifier rules */
 .img-magnifier-container {
     position: relative;
+    width: fit-content;
 }
 
 .img-magnifier-glass {

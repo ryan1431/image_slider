@@ -7,18 +7,38 @@ let buttonMag = document.getElementById('mag-button');
 let slider = document.getElementById('mag-slider-container');
 let sliderRange = document.getElementById('mag-range-slider');
 
+// main image container
+let imgContainer = document.getElementsByClassName('img-magnifier-container');
+imgContainer[0].onmouseover = activateGlass;
+
 sliderRange.oninput = changeZoom;
-buttonFront.onclick = borderChange;
-buttonBack.onclick = borderChange;
+buttonFront.onclick = photoChange;
+buttonBack.onclick = photoChange;
 buttonMag.onclick = toggleMagnify;
 let toggle = 0;
 let toggleEnable = true;
+let magnifyActive = true;
 /* Create magnifier glass: */
 let glass = document.createElement("DIV");
 glass.setAttribute("class", "img-magnifier-glass");
+
 let zoom = 1.5;
 
-function borderChange(e) {
+
+
+
+function activateGlass(e) {
+    console.log(e);
+    if(magnifyActive) {
+        magnify(e.target.closest('.slider').querySelector("[data-active='true']").id, zoom);
+        console.log(e.target.closest('.slider').querySelector("[data-active='true']").id);
+    }
+}
+
+
+
+
+function photoChange(e) {
     buttonFront.style.border = "1px solid rgba(128, 128, 128, 0.44)"
     buttonBack.style.border = "1px solid rgba(128, 128, 128, 0.44)"
     
@@ -30,13 +50,19 @@ function borderChange(e) {
     if (e.target.id === 'front-button') {
         imgFront.style.opacity = "100%";
         imgBack.style.opacity = "0%";
-        glass.style.backgroundImage = "url('" + imgFront.src + "')";
+        //glass.style.backgroundImage = "url('" + imgFront.src + "')";
+        console.log(e.target);
+        e.target.closest('.img-full-container').querySelector("#front-image").dataset.active = 'true';
+        e.target.closest('.img-full-container').querySelector("#back-image").dataset.active = 'false';
     }
     else {
         imgFront.style.opacity = "0%";
         imgFront.zIndex = "-15";
         imgBack.style.opacity = "100%";
-        glass.style.backgroundImage = "url('" + imgBack.src + "')";
+        //glass.style.backgroundImage = "url('" + imgBack.src + "')";
+        e.target.closest('.img-full-container').querySelector("#front-image").dataset.active = 'false';
+        e.target.closest('.img-full-container').querySelector("#back-image").dataset.active = 'true';
+        
     }
 }
 
@@ -49,7 +75,9 @@ function toggleMagnify(e) {
         e.target.style.background = "none";
         e.target.children[0].style.color = '#878a8e';
         glass.style.display = 'none';
-        
+        console.log(e);
+        // prevent magnify function call 
+        magnifyActive = false;
         // collapse slider
         slider.style.maxWidth = '0';
         slider.style.padding = '0';
@@ -67,7 +95,9 @@ function toggleMagnify(e) {
         e.target.style.background = "#dcdcdc74";
         e.target.children[0].style.color = '#6a6d6f';
         glass.style.display = '';
-
+        console.log('called');
+        // allow magnify function call 
+        magnifyActive = true;
         // expand slider
         slider.style.maxWidth = '';
         slider.style.padding = '';
@@ -150,7 +180,7 @@ function magnify(imgID, zoomAmt) {
     }
 }
 
-magnify("front-image", 1.5);
+
 
 
 

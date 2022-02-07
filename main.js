@@ -1,8 +1,5 @@
 let n,
-    imgFront = document.getElementsByClassName('image-front'),
-    imgBack = document.getElementsByClassName('image-back'),
-    buttonFront = document.getElementsByClassName('front-button'),
-    buttonBack = document.getElementsByClassName('back-button'),
+    imgButtons = document.querySelectorAll(":is([class$='imgbutton'], [class$='imgbutton-default'])"),
     toggle = 0,
     toggleEnable = true,
     magnifyActive = true,
@@ -13,10 +10,7 @@ let n,
     sliderContainer = document.getElementsByClassName('mag-slider-container');
 //
 // add event listeners for each button
-for (let el of buttonFront) {
-    el.addEventListener('click', photoChange);
-}
-for (let el of buttonBack) {
+for (let el of imgButtons) {
     el.addEventListener('click', photoChange);
 }
 
@@ -39,7 +33,6 @@ for (let el of allSliderContainers) {
 // main image container
 let imgContainer = document.getElementsByClassName('img-magnifier-container');
 for (let i = 0; i < imgContainer.length; i++) {
-
     imgContainer[i].addEventListener('mouseover', activateGlass);
     imgContainer[i].addEventListener('mouseleave', deActivateGlass);
     zoom[i] = 1.5;
@@ -60,7 +53,7 @@ function currentContainer(e) {
 function activateGlass(e) {
     //console.clear();
     
-    currentContainer(e); // set N value (that is all this does)
+    currentContainer(e); // set 'n' value (that is all this does)
     if(e.target.closest('.img-full-container').querySelector(".mag-button").dataset.active === 'true') {
         console.log('activate' + ' ' + n);
         // magnify function ******
@@ -80,44 +73,39 @@ function deActivateGlass(e) {
 }
 
 function photoChange(e) {
-    buttonFront[n].style.border = "1px solid rgba(128, 128, 128, 0.44)"
-    buttonBack[n].style.border = "1px solid rgba(128, 128, 128, 0.44)"
-    e.target.style.border = "1px solid grey"
-    
-    if (e.target.className === 'front-button') {
-        imgFront[n].style.opacity = "100%";
-        imgBack[n].style.opacity = "0%";
-        e.target.closest('.img-full-container').querySelector(".image-front").dataset.active = 'true';
-        e.target.closest('.img-full-container').querySelector(".image-back").dataset.active = 'false';
+    // find relative container
+    let container = e.target.closest('.img-full-container');
+    let currentImages = container.querySelectorAll(".img-magnifier-container [class*='image']");
+    let currentButtons = container.querySelectorAll(".img_buttons [class*='imgbutton']");
+    let clicked = e.target;
+    let currentTarget = clicked.className.split('-')[0];
+    let targetImage;
+    //buttons 
+    for (let el of currentButtons) {
+        el.style.border = '1px solid rgba(128, 128, 128, 0.44)';
     }
-    else {
-        imgFront[n].style.opacity = "0%";
-        imgFront[n].style.zIndex = "-10";
-        //imgBack[n].style.zIndex = "10";
-        //glass[n].style.zIndex = "11";
-        imgBack[n].style.opacity = "100%";
-        e.target.closest('.img-full-container').querySelector(".image-front").dataset.active = 'false';
-        e.target.closest('.img-full-container').querySelector(".image-back").dataset.active = 'true';
+    clicked.style.border = "1px solid grey";
+
+    // images
+    for (let el of currentImages) {
+        el.style.opacity = '0%';
+        el.dataset.active = 'false';
+        if(el.className.split('-')[0] === currentTarget) {
+            targetImage = el;
+        }
     }
+    // comparer
+    targetImage.style.opacity = "100%";
+    targetImage.dataset.active = "true";
 }
 
 // Toggly magnifying glass //
 function toggleMagnify(e) {
     if (e.target.dataset.active === 'true') {   //turn OFF
-        console.log(e.target);
-        //toggleEnable = false;
         e.target.dataset.active = 'false';
         e.target.style.background = "none";
         e.target.children[0].style.color = '#878a8e';
         glass[n].style.display = 'none';
-
-        /*let mag = e.target.closest('.img-full-container').getElementsByClassName('img-magnifier-glass');
-        for (let el of mag) {
-            el.style.display = 'none';
-        }*/
-        // prevent magnify function call 
-        //magnifyActive = false;
-        // collapse sliderContainer
         sliderContainer[n].style.maxWidth = '0';
         sliderContainer[n].style.padding = '0';
         sliderContainer[n].style.margin = '0';
@@ -136,20 +124,10 @@ function toggleMagnify(e) {
             }, timeoutDur);
         }
     } else {                // turn ON
-        //toggleEnable = false;
-
-        //button front, button back
         e.target.dataset.active = 'true';
         e.target.style.background = "#dcdcdc74";
         e.target.children[0].style.color = '#6a6d6f';
         glass[n].style.display = 'block';
-        /*let mag = e.target.closest('.img-full-container').getElementsByClassName('img-magnifier-glass');
-        for (let el of mag) {
-            el.style.display = '';
-        }*/
-        // allow magnify function call 
-        //magnifyActive = true;
-        // expand sliderContainer[n]
         sliderContainer[n].style.maxWidth = '';
         sliderContainer[n].style.padding = '';
         sliderContainer[n].style.margin = '';
@@ -164,13 +142,12 @@ function toggleMagnify(e) {
 // Change magnifying glass zoom
 function changeZoom(e) {
     zoom[n] = e.target.value;
-    //console.log(e.target.value);
 }
 
 // Magnifying glass function //
 function magnify(imgID, zoomAmt) {
     var w, h, bw;
-    //console.log(n);
+
     /* Insert magnifier glass: */
     imgID.parentElement.insertBefore(glass[n], imgID);
   
@@ -223,41 +200,17 @@ function magnify(imgID, zoomAmt) {
     }
 }
 
-
-
+// Init mag buttons to OFF
 for (let i = 0; i < allSliderContainers.length; i++) {
     n = i;
     buttonMag[n].click();
 }
 
-
-
-
+// Init n value
 setTimeout(() => {
     n = -1; 
     timeoutDur = 100;
-    console.log('changed');
 }, 200);
 
-
+// Prevent further init changes
 init = false;
-/* bug 
-
-switching image first then turning on magnifier causes glitch where sometimes it wont activate.
-- if you switch images then come back, it works fine
-
-- switching back to first image while magnifier is off, then turning it on, will not replicate the issue. (only happens with second image)
-
-
-solution: 
-position of magnifier when leaving field, since magnifier hover element is used and not image hover
-
-thus, 
-
-- on image over: 
-    - check if magnifier dataset is active,
-        - if so, set opacity to img-magnifier-glass
-        - else, do nothing
-..
-
-*/

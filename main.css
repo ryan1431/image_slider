@@ -121,11 +121,11 @@
     /*Set the size of the magnifier glass:*/
     width: 220px;
     height: 220px;
-    opacity: 0;
+    /*opacity: 0;*/
 }
 .img-magnifier-glass:hover {
     z-index: 3;
-    opacity: 1;
+    /*opacity: 1;*/
 }
 .image-back {
     z-index: -1;

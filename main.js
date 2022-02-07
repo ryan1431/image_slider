@@ -45,7 +45,6 @@ function currentContainer(e) {
     for (let i = 0; i < allSliderContainers.length; i++) {
         if(e === allSliderContainers[i] && n !== i) {
             n = i;
-            console.log(n);
         }
     }
 }
@@ -55,18 +54,14 @@ function activateGlass(e) {
     
     currentContainer(e); // set 'n' value (that is all this does)
     if(e.target.closest('.img-full-container').querySelector(".mag-button").dataset.active === 'true') {
-        console.log('activate' + ' ' + n);
         // magnify function ******
         magnify(e.target.closest('.img-magnifier-container').querySelector("[data-active='true']"), zoom[n]);
-        console.log(e.target.closest('.img-full-container').querySelector('.img-magnifier-glass').style.opacity);
-        console.log('activate glass');
         e.target.closest('.img-full-container').querySelector(".img-magnifier-glass").style.opacity = '1';
     }
 }
 
 function deActivateGlass(e) {
     if(e.target.closest('.img-full-container').querySelector(".mag-button").dataset.active === 'true') {
-        console.log('deactivate glass');
         e.target.closest('.img-full-container').querySelector(".img-magnifier-glass").style.opacity = '0';
     }
     

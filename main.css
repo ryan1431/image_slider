@@ -1,27 +1,22 @@
 * {
     box-sizing: border-box;
 }
-
 .img-full-container {
     width: fit-content;
 }
-
 .img-magnifier-container img {
     width: 575px;
 }
-
 .img-magnifier-container .image-front {
     opacity: 100%;
     transition-duration: 0.3s;
 }
-
 .img-magnifier-container .image-back {
     position: absolute;
     left: 0px;
     opacity: 0%;
     transition-duration: 0.3s;
 }
-
 .img_buttons div {
     padding: 5px;
     border: 1px solid rgba(128, 128, 128, 0.44);
@@ -30,32 +25,25 @@
     float: left;
     margin-left: 4px;
 }
-
 .img_buttons img {
     width: 120px;
     height: 35px;
     pointer-events: none;
 }
-
 .img_buttons i { 
     pointer-events: none;
 }
-
-
 .img_buttons div:hover {
     cursor:pointer;
 }
-
 .img_buttons .front-button {
     border: 1px solid grey;
 }
-
 .clearfix::after {
     content: "";
     clear: both;
     display: table;
 }
-
 /* magnify enable button */
 .img_buttons .mag-button {
     font-size: 25px;
@@ -66,7 +54,6 @@
     background: #dcdcdc74;
     transition-duration: 0.15s;
 }
-
 [id^='mag'] {
     width: 50px;
     display: flex;
@@ -83,7 +70,6 @@
     padding: 0;
 }
 /* ^ temporary ^ */
-
 .img_buttons .mag-slider-container {
     margin-left: 0;
     max-width: 150px;
@@ -93,7 +79,6 @@
     border-bottom-left-radius: 0;
     border-left: none;
 }
-
 /* custom slider */
 .img_buttons .mag-range-slider {
     position:relative;
@@ -116,7 +101,6 @@
     cursor: pointer; /* Cursor on hover */
     border-radius: 10px;
 }
-
 .img_buttons .mag-range-slider::-moz-range-thumb {
     width: 6px; /* Set a specific slider handle width */
     height: 25px; /* Slider handle height */
@@ -124,13 +108,11 @@
     cursor: pointer; /* Cursor on hover */
     border-radius: 10px;
 }
-
 /* magnifier rules */
 .img-magnifier-container {
     position: relative;
     width: fit-content;
 }
-
 .img-magnifier-glass {
     position: absolute;
     border: 1px solid rgb(111, 111, 111);
@@ -141,13 +123,10 @@
     height: 220px;
     opacity: 0;
 }
-
 .img-magnifier-glass:hover {
     z-index: 3;
     opacity: 1;
 }
-
 .image-back {
     z-index: -1;
 }
-

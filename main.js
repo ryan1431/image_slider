@@ -1,12 +1,14 @@
-// Save elements as variables
-// n refers to the child number which will be set later
-let n = 0;
-let imgFront = document.getElementsByClassName('image-front');
-let imgBack = document.getElementsByClassName('image-back');
-
+let n = 0,
+    imgFront = document.getElementsByClassName('image-front'),
+    imgBack = document.getElementsByClassName('image-back'),
+    buttonFront = document.getElementsByClassName('front-button'),
+    buttonBack = document.getElementsByClassName('back-button'),
+    toggle = 0,
+    toggleEnable = true,
+    magnifyActive = true,
+    zoom = [],
+    sliderContainer = document.getElementsByClassName('mag-slider-container');
 //
-let buttonFront = document.getElementsByClassName('front-button');
-let buttonBack = document.getElementsByClassName('back-button');
 // add event listeners for each button
 for (let el of buttonFront) {
     el.addEventListener('click', photoChange);
@@ -15,14 +17,11 @@ for (let el of buttonBack) {
     el.addEventListener('click', photoChange);
 }
 
-
 let buttonMag = document.getElementsByClassName('mag-button');
 for (let el of buttonMag) {
     el.addEventListener('click', toggleMagnify);
 }
 
-
-let sliderContainer = document.getElementsByClassName('mag-slider-container');
 let sliderRange = document.getElementsByClassName('mag-range-slider');
 for (let el of sliderRange) {
     el.addEventListener('input', changeZoom);
@@ -33,12 +32,9 @@ for (let el of allSliderContainers) {
     el.addEventListener('mouseover', currentContainer);
     el.style.zIndex = 10;
 }
-
-            /* Create magnifier glass: */
-// ******* needs to be created for each parent div ******* //
+// Glass div, moves to selected image
 let glass = document.createElement("DIV");
 glass.setAttribute("class", "img-magnifier-glass");
-
 
 // main image container
 let imgContainer = document.getElementsByClassName('img-magnifier-container');
@@ -46,31 +42,15 @@ for (let el of imgContainer) {
     el.onmouseover = activateGlass;
     
 }
-let zoom = [];
 for (let i = 0; i < imgContainer.length; i++) {
     imgContainer[i].onmouseover = activateGlass;
     zoom[i] = 1.5;
 }
 
-// set defaults
-let toggle = 0;
-let toggleEnable = true;
-let magnifyActive = true;
-
-
-
 function currentContainer(e) {
-    console.clear();
-    console.log('mouseover fired');
-    
-    console.log(e.target.closest('.img-full-container'));
-    console.log(allSliderContainers[0]);
-    console.log(e.target.closest('.img-full-container') === allSliderContainers[0]);
     for (let i = 0; i < allSliderContainers.length; i++) {
         if(e.target.closest('.img-full-container') === allSliderContainers[i]) {
             n = i;
-            console.log('if condition: ' + (e.target.closest('.img-full-container') === allSliderContainers[i]));
-            console.log('n = ' + n);
         }
     }
 }
@@ -83,16 +63,11 @@ function activateGlass(e) {
     }
 }
 
-
-
-
 function photoChange(e) {
     buttonFront[n].style.border = "1px solid rgba(128, 128, 128, 0.44)"
     buttonBack[n].style.border = "1px solid rgba(128, 128, 128, 0.44)"
     
     e.target.style.border = "1px solid grey"
-    
-    //console.log(e);
 
     if (e.target.className === 'front-button') {
         imgFront[n].style.opacity = "100%";
@@ -172,8 +147,6 @@ function changeZoom(e) {
 function magnify(imgID, zoomAmt) {
     var w, h, bw;
   
-    
-  
     /* Insert magnifier glass: */
     imgID.parentElement.insertBefore(glass, imgID);
   
@@ -211,7 +184,6 @@ function magnify(imgID, zoomAmt) {
       /* Display what the magnifier glass "sees": */
       glass.style.backgroundPosition = "-" + ((x * zoomAmt) - w + bw) + "px -" + ((y * zoomAmt) - h + bw) + "px";
     }
-  
     function getCursorPos(e) {
       var a, x = 0, y = 0;
       e = e || window.event;
@@ -226,14 +198,3 @@ function magnify(imgID, zoomAmt) {
       return {x : x, y : y};
     }
 }
-
-
-
-
-
-/* Instructions 
-
-1. create glass on mouseover, delete when mouse exits
-
-
-*/

@@ -31,6 +31,7 @@ for (let el of sliderRange) {
 let allSliderContainers = document.getElementsByClassName('img-full-container');
 for (let el of allSliderContainers) {
     el.addEventListener('mouseover', currentContainer);
+    el.style.zIndex = 10;
 }
 
             /* Create magnifier glass: */
@@ -41,22 +42,35 @@ glass.setAttribute("class", "img-magnifier-glass");
 
 // main image container
 let imgContainer = document.getElementsByClassName('img-magnifier-container');
-imgContainer[n].onmouseover = activateGlass;
+for (let el of imgContainer) {
+    el.onmouseover = activateGlass;
+    
+}
+let zoom = [];
+for (let i = 0; i < imgContainer.length; i++) {
+    imgContainer[i].onmouseover = activateGlass;
+    zoom[i] = 1.5;
+}
 
 // set defaults
 let toggle = 0;
 let toggleEnable = true;
 let magnifyActive = true;
-let zoom = 1.5;
+
 
 
 function currentContainer(e) {
+    console.clear();
     console.log('mouseover fired');
-    console.log(e.target);
-    console.log(e.target === allSliderContainers[0]);
+    
+    console.log(e.target.closest('.img-full-container'));
+    console.log(allSliderContainers[0]);
+    console.log(e.target.closest('.img-full-container') === allSliderContainers[0]);
     for (let i = 0; i < allSliderContainers.length; i++) {
-        if(e.target === allSliderContainers[i]) {
+        if(e.target.closest('.img-full-container') === allSliderContainers[i]) {
             n = i;
+            console.log('if condition: ' + (e.target.closest('.img-full-container') === allSliderContainers[i]));
+            console.log('n = ' + n);
         }
     }
 }
@@ -64,7 +78,7 @@ function currentContainer(e) {
 function activateGlass(e) {
     //console.log(e);
     if(magnifyActive) {
-        magnify(e.target.closest('.img-magnifier-container').querySelector("[data-active='true']"), zoom);
+        magnify(e.target.closest('.img-magnifier-container').querySelector("[data-active='true']"), zoom[n]);
         //console.log(e.target.closest('.img-magnifier-container').querySelector("[data-active='true']").class);
     }
 }
@@ -107,7 +121,8 @@ function toggleMagnify(e) {
     if (!!(toggle % 2)) {   //turn OFF
         toggleEnable = false;
         e.target.style.background = "none";
-        e.target.children[n].style.color = '#878a8e';
+        e.target.children[0].style.color = '#878a8e';
+        console.log(e.target.children[0]);
         glass.style.display = 'none';
         //console.log(e);
         // prevent magnify function call 
@@ -127,7 +142,7 @@ function toggleMagnify(e) {
     } else {                // turn ON
         toggleEnable = false;
         e.target.style.background = "#dcdcdc74";
-        e.target.children[n].style.color = '#6a6d6f';
+        e.target.children[0].style.color = '#6a6d6f';
         glass.style.display = '';
         // allow magnify function call 
         magnifyActive = true;
@@ -149,7 +164,7 @@ function toggleMagnify(e) {
 
 // Change magnifying glass zoom
 function changeZoom(e) {
-    zoom = e.target.value;
+    zoom[n] = e.target.value;
     //console.log(e.target.value);
 }
 

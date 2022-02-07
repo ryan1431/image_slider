@@ -1,4 +1,4 @@
-let n = 0,
+let n = -1,
     imgFront = document.getElementsByClassName('image-front'),
     imgBack = document.getElementsByClassName('image-back'),
     buttonFront = document.getElementsByClassName('front-button'),
@@ -7,6 +7,7 @@ let n = 0,
     toggleEnable = true,
     magnifyActive = true,
     zoom = [],
+    glass = [],
     sliderContainer = document.getElementsByClassName('mag-slider-container');
 //
 // add event listeners for each button
@@ -32,34 +33,32 @@ for (let el of allSliderContainers) {
     el.addEventListener('mouseover', currentContainer);
     el.style.zIndex = 10;
 }
-// Glass div, moves to selected image
-let glass = document.createElement("DIV");
-glass.setAttribute("class", "img-magnifier-glass");
 
 // main image container
 let imgContainer = document.getElementsByClassName('img-magnifier-container');
-for (let el of imgContainer) {
-    el.onmouseover = activateGlass;
-    
-}
 for (let i = 0; i < imgContainer.length; i++) {
     imgContainer[i].onmouseover = activateGlass;
     zoom[i] = 1.5;
+    glass[i] = document.createElement("DIV");
+    glass[i].setAttribute("class", "img-magnifier-glass");
 }
 
 function currentContainer(e) {
+    e = e.target.closest('.img-full-container');
     for (let i = 0; i < allSliderContainers.length; i++) {
-        if(e.target.closest('.img-full-container') === allSliderContainers[i]) {
+        if(e === allSliderContainers[i] && n !== i) {
             n = i;
+            console.log(n);
         }
     }
 }
 
 function activateGlass(e) {
-    //console.log(e);
+    console.log('activate glass');
+    currentContainer(e);
     if(magnifyActive) {
         magnify(e.target.closest('.img-magnifier-container').querySelector("[data-active='true']"), zoom[n]);
-        //console.log(e.target.closest('.img-magnifier-container').querySelector("[data-active='true']").class);
+        console.log(e.target.closest('.img-magnifier-container').querySelector("[data-active='true']"));
     }
 }
 
@@ -68,7 +67,7 @@ function photoChange(e) {
     buttonBack[n].style.border = "1px solid rgba(128, 128, 128, 0.44)"
     
     e.target.style.border = "1px solid grey"
-
+    console.log('photo change');
     if (e.target.className === 'front-button') {
         imgFront[n].style.opacity = "100%";
         imgBack[n].style.opacity = "0%";
@@ -97,11 +96,14 @@ function toggleMagnify(e) {
         toggleEnable = false;
         e.target.style.background = "none";
         e.target.children[0].style.color = '#878a8e';
-        console.log(e.target.children[0]);
-        glass.style.display = 'none';
-        //console.log(e);
+        glass[n].style.display = 'none';
+
+        /*let mag = e.target.closest('.img-full-container').getElementsByClassName('img-magnifier-glass');
+        for (let el of mag) {
+            el.style.display = 'none';
+        }*/
         // prevent magnify function call 
-        magnifyActive = false;
+        //magnifyActive = false;
         // collapse sliderContainer
         sliderContainer[n].style.maxWidth = '0';
         sliderContainer[n].style.padding = '0';
@@ -118,9 +120,13 @@ function toggleMagnify(e) {
         toggleEnable = false;
         e.target.style.background = "#dcdcdc74";
         e.target.children[0].style.color = '#6a6d6f';
-        glass.style.display = '';
+        glass[n].style.display = '';
+        /*let mag = e.target.closest('.img-full-container').getElementsByClassName('img-magnifier-glass');
+        for (let el of mag) {
+            el.style.display = '';
+        }*/
         // allow magnify function call 
-        magnifyActive = true;
+        //magnifyActive = true;
         // expand sliderContainer[n]
         sliderContainer[n].style.maxWidth = '';
         sliderContainer[n].style.padding = '';
@@ -146,24 +152,24 @@ function changeZoom(e) {
 // Magnifying glass function //
 function magnify(imgID, zoomAmt) {
     var w, h, bw;
-  
+    //console.log(n);
     /* Insert magnifier glass: */
-    imgID.parentElement.insertBefore(glass, imgID);
+    imgID.parentElement.insertBefore(glass[n], imgID);
   
     /* Set background properties for the magnifier glass: */
-    glass.style.backgroundImage = "url('" + imgID.src + "')";
-    glass.style.backgroundRepeat = "no-repeat";
-    glass.style.backgroundSize = (imgID.width * zoomAmt) + "px " + (imgID.height * zoomAmt) + "px";
+    glass[n].style.backgroundImage = "url('" + imgID.src + "')";
+    glass[n].style.backgroundRepeat = "no-repeat";
+    glass[n].style.backgroundSize = (imgID.width * zoomAmt) + "px " + (imgID.height * zoomAmt) + "px";
     bw = 3;
-    w = glass.offsetWidth / 2;
-    h = glass.offsetHeight / 2;
+    w = glass[n].offsetWidth / 2;
+    h = glass[n].offsetHeight / 2;
   
-    /* Execute a function when someone moves the magnifier glass over the image: */
-    glass.addEventListener("mousemove", moveMagnifier);
+    /* Execute a function when someone moves the magnifier glass[n] over the image: */
+    glass[n].addEventListener("mousemove", moveMagnifier);
     imgID.addEventListener("mousemove", moveMagnifier);
   
     /*and also for touch screens:*/
-    glass.addEventListener("touchmove", moveMagnifier);
+    glass[n].addEventListener("touchmove", moveMagnifier);
     imgID.addEventListener("touchmove", moveMagnifier);
     function moveMagnifier(e) {
       var pos, x, y;
@@ -179,10 +185,10 @@ function magnify(imgID, zoomAmt) {
       if (y > imgID.height - (h / zoomAmt)) {y = imgID.height - (h / zoomAmt);}
       if (y < h / zoomAmt) {y = h / zoomAmt;}
       /* Set the position of the magnifier glass: */
-      glass.style.left = (x - w) + "px";
-      glass.style.top = (y - h) + "px";
+      glass[n].style.left = (x - w) + "px";
+      glass[n].style.top = (y - h) + "px";
       /* Display what the magnifier glass "sees": */
-      glass.style.backgroundPosition = "-" + ((x * zoomAmt) - w + bw) + "px -" + ((y * zoomAmt) - h + bw) + "px";
+      glass[n].style.backgroundPosition = "-" + ((x * zoomAmt) - w + bw) + "px -" + ((y * zoomAmt) - h + bw) + "px";
     }
     function getCursorPos(e) {
       var a, x = 0, y = 0;
@@ -198,3 +204,4 @@ function magnify(imgID, zoomAmt) {
       return {x : x, y : y};
     }
 }
+

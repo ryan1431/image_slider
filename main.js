@@ -38,6 +38,8 @@ for (let i = 0; i < imgContainer.length; i++) {
     zoom[i] = 1.5;
     glass[i] = document.createElement("DIV");
     glass[i].setAttribute("class", "img-magnifier-glass");
+    glass[i].style.left = "10%";
+    glass[i].style.top = "10%";
 }
 
 function currentContainer(e) {
@@ -50,11 +52,11 @@ function currentContainer(e) {
 }
 
 function activateGlass(e) {
-    //console.clear();
-    
-    currentContainer(e); // set 'n' value (that is all this does)
+    // first get value of global 'n'
+    currentContainer(e); 
+
+    // then call magnify :
     if(e.target.closest('.img-full-container').querySelector(".mag-button").dataset.active === 'true') {
-        // magnify function ******
         magnify(e.target.closest('.img-magnifier-container').querySelector("[data-active='true']"), zoom[n]);
         e.target.closest('.img-full-container').querySelector(".img-magnifier-glass").style.opacity = '1';
     }
@@ -75,23 +77,30 @@ function photoChange(e) {
     let clicked = e.target;
     let currentTarget = clicked.className.split('-')[0];
     let targetImage;
-    //buttons 
+    // give all buttons default style
     for (let el of currentButtons) {
         el.style.border = '1px solid rgba(128, 128, 128, 0.44)';
     }
+    // grey border on clicked button
     clicked.style.border = "1px solid grey";
 
-    // images
+    // make all images invisible
     for (let el of currentImages) {
         el.style.opacity = '0%';
         el.dataset.active = 'false';
+        el.style.pointerEvents = "none";
+        el.style.zIndex = "-2";
+        // identify correlating image to button image
         if(el.className.split('-')[0] === currentTarget) {
             targetImage = el;
         }
     }
-    // comparer
+    // set correlating image to show & be active
     targetImage.style.opacity = "100%";
     targetImage.dataset.active = "true";
+    targetImage.style.pointerEvents = "";
+    targetImage.style.zIndex = "-1";
+    targetImage.closest(".img-magnifier-container").querySelector(".img-magnifier-glass").style.zIndex = "0";
 }
 
 // Toggly magnifying glass //
